@@ -728,7 +728,9 @@
       "delete_column": "Excluir coluna",
       "toggle_header_row": "Alternar linha de cabeçalho",
       "delete_table": "Excluir tabela",
-      "pick_size": "Escolher tamanho"
+      "pick_size": "Escolher tamanho",
+      "font_size": "Tamanho da fonte",
+      "font_size_default": "Padrão"
     },
     "send_filing_warning": "Enviado - mas a limpeza posterior falhou, um rascunho antigo pode permanecer."
   },

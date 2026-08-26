@@ -11,6 +11,7 @@ import TextAlign from "@tiptap/extension-text-align";
 import { TextDirection } from "@/components/email/text-direction";
 import { TextStyle } from "@tiptap/extension-text-style";
 import Color from "@tiptap/extension-color";
+import { FontSize, FONT_SIZES } from "@/components/email/font-size";
 import { ResizableImage } from "@/components/email/resizable-image";
 import Placeholder from "@tiptap/extension-placeholder";
 import { Table } from "@tiptap/extension-table";
@@ -198,6 +199,7 @@ export function RichTextEditor({
       }),
       TextStyle,
       Color,
+      FontSize,
       ResizableImage,
       Placeholder.configure({
         placeholder,
@@ -326,6 +328,19 @@ export function RichTextEditor({
   const tableWrapperRef = useRef<HTMLDivElement>(null);
   const [colorMenuOpen, setColorMenuOpen] = useState(false);
   const colorWrapperRef = useRef<HTMLDivElement>(null);
+  const [fontSizeMenuOpen, setFontSizeMenuOpen] = useState(false);
+  const fontSizeWrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!fontSizeMenuOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (fontSizeWrapperRef.current && !fontSizeWrapperRef.current.contains(e.target as Node)) {
+        setFontSizeMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [fontSizeMenuOpen]);
 
   useEffect(() => {
     if (!colorMenuOpen) return;
@@ -355,10 +370,62 @@ export function RichTextEditor({
     );
   }
 
+  const currentFontSize: string | null = editor.getAttributes("textStyle").fontSize ?? null;
+
   return (
     <div className={cn("flex flex-col", hasError && "ring-2 ring-red-500 dark:ring-red-400 rounded", className)}>
-      {/* Toolbar */}
-      <div className="flex flex-wrap items-center gap-0.5 px-3 py-1.5 border-b border-border/50 bg-muted/30">
+      {/* Toolbar - sticky within the composer's scroll container so it stays
+          visible while editing long bodies (the fields section scrolls away
+          above it; the opaque background keeps body text from bleeding
+          through while pinned). */}
+      <div className="sticky top-0 z-20 flex flex-wrap items-center gap-0.5 px-3 py-1.5 border-b border-border/50 bg-muted">
+        {/* Font size */}
+        <div ref={fontSizeWrapperRef} className="relative">
+          <ToolbarButton
+            active={fontSizeMenuOpen}
+            onClick={() => setFontSizeMenuOpen((v) => !v)}
+            title={tToolbar("font_size")}
+          >
+            <span className="text-xs font-medium min-w-6 text-center">
+              {currentFontSize ? currentFontSize.replace("px", "") : "Aa"}
+            </span>
+          </ToolbarButton>
+          {fontSizeMenuOpen && (
+            <div className="absolute z-50 top-full start-0 mt-1 bg-popover border border-border rounded-md shadow-md p-1 min-w-[64px]">
+              {FONT_SIZES.map((size) => (
+                <button
+                  key={size}
+                  type="button"
+                  onClick={() => {
+                    editor.chain().focus().setFontSize(size).run();
+                    setFontSizeMenuOpen(false);
+                  }}
+                  className={cn(
+                    "block w-full text-start px-2 py-1 rounded hover:bg-accent transition-colors",
+                    currentFontSize === size && "bg-accent text-accent-foreground"
+                  )}
+                  style={{ fontSize: size, lineHeight: 1.4 }}
+                >
+                  {size}
+                </button>
+              ))}
+              <div className="h-px bg-border my-1" />
+              <button
+                type="button"
+                className="flex items-center gap-2 px-2 py-1 text-sm rounded hover:bg-accent text-start w-full"
+                onClick={() => {
+                  editor.chain().focus().unsetFontSize().run();
+                  setFontSizeMenuOpen(false);
+                }}
+              >
+                <RemoveFormatting className="w-4 h-4" /> {tToolbar("font_size_default")}
+              </button>
+            </div>
+          )}
+        </div>
+
+        <ToolbarSeparator />
+
         <ToolbarButton
           active={editor.isActive("bold")}
           onClick={() => editor.chain().focus().toggleBold().run()}

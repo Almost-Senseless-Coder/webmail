@@ -728,7 +728,9 @@
       "delete_column": "Oszlop törlése",
       "toggle_header_row": "Fejlécsor váltása",
       "delete_table": "Táblázat törlése",
-      "pick_size": "Méret kiválasztása"
+      "pick_size": "Méret kiválasztása",
+      "font_size": "Betűméret",
+      "font_size_default": "Alapértelmezett"
     },
     "send_filing_warning": "Elküldve - de az utólagos rendrakás nem sikerült, egy elavult piszkozat megmaradhat."
   },

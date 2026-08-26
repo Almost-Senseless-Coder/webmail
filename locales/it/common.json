@@ -728,7 +728,9 @@
       "delete_column": "Elimina colonna",
       "toggle_header_row": "Attiva/disattiva riga di intestazione",
       "delete_table": "Elimina tabella",
-      "pick_size": "Scegli dimensione"
+      "pick_size": "Scegli dimensione",
+      "font_size": "Dimensione carattere",
+      "font_size_default": "Predefinita"
     },
     "send_filing_warning": "Inviato - ma la pulizia successiva non è riuscita, potrebbe restare una bozza obsoleta."
   },

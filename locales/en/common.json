@@ -728,7 +728,9 @@
       "delete_column": "Delete column",
       "toggle_header_row": "Toggle header row",
       "delete_table": "Delete table",
-      "pick_size": "Pick size"
+      "pick_size": "Pick size",
+      "font_size": "Font size",
+      "font_size_default": "Default"
     },
     "send_filing_warning": "Sent - but the post-send cleanup failed, a stale draft may remain."
   },

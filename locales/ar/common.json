@@ -728,7 +728,9 @@
       "delete_column": "حذف العمود",
       "toggle_header_row": "تبديل صف الرأس",
       "delete_table": "حذف الجدول",
-      "pick_size": "اختيار الحجم"
+      "pick_size": "اختيار الحجم",
+      "font_size": "حجم الخط",
+      "font_size_default": "افتراضي"
     },
     "send_filing_warning": "تم الإرسال - لكن التنظيف بعد الإرسال فشل، وقد تبقى مسودة قديمة."
   },

@@ -728,7 +728,9 @@
       "delete_column": "Usuń kolumnę",
       "toggle_header_row": "Przełącz wiersz nagłówka",
       "delete_table": "Usuń tabelę",
-      "pick_size": "Wybierz rozmiar"
+      "pick_size": "Wybierz rozmiar",
+      "font_size": "Rozmiar czcionki",
+      "font_size_default": "Domyślny"
     },
     "send_filing_warning": "Wysłano - ale późniejsze porządkowanie nie powiodło się, może pozostać nieaktualna wersja robocza."
   },

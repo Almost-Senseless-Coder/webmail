@@ -728,7 +728,9 @@
       "delete_column": "Șterge coloana",
       "toggle_header_row": "Comută rândul de antet",
       "delete_table": "Șterge tabelul",
-      "pick_size": "Alege dimensiunea"
+      "pick_size": "Alege dimensiunea",
+      "font_size": "Dimensiune font",
+      "font_size_default": "Implicit"
     },
     "send_filing_warning": "Trimis - dar curățarea ulterioară a eșuat, poate rămâne o ciornă veche."
   },

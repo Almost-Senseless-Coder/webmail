@@ -728,7 +728,9 @@
       "delete_column": "Sütunu sil",
       "toggle_header_row": "Başlık satırını aç/kapat",
       "delete_table": "Tabloyu sil",
-      "pick_size": "Boyut seç"
+      "pick_size": "Boyut seç",
+      "font_size": "Yazı boyutu",
+      "font_size_default": "Varsayılan"
     },
     "send_filing_warning": "Gönderildi - ancak sonrasındaki temizleme başarısız oldu, eski bir taslak kalabilir."
   },

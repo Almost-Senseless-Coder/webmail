@@ -693,7 +693,9 @@
       "delete_column": "מחיקת עמודה",
       "toggle_header_row": "החלפת שורת כותרת",
       "delete_table": "מחיקת טבלה",
-      "pick_size": "בחירת גודל"
+      "pick_size": "בחירת גודל",
+      "font_size": "גודל גופן",
+      "font_size_default": "ברירת מחדל"
     },
     "send_filing_warning": "נשלח - אך הניקוי שלאחר השליחה נכשל, ייתכן שתישאר טיוטה ישנה."
   },

@@ -728,7 +728,9 @@
       "delete_column": "列を削除",
       "toggle_header_row": "ヘッダー行の切り替え",
       "delete_table": "表を削除",
-      "pick_size": "サイズを選択"
+      "pick_size": "サイズを選択",
+      "font_size": "文字サイズ",
+      "font_size_default": "デフォルト"
     },
     "send_filing_warning": "送信されましたが、送信後の整理に失敗しました。古い下書きが残る場合があります。"
   },

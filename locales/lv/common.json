@@ -728,7 +728,9 @@
       "delete_column": "Dzēst kolonnu",
       "toggle_header_row": "Pārslēgt galvenes rindu",
       "delete_table": "Dzēst tabulu",
-      "pick_size": "Izvēlēties izmēru"
+      "pick_size": "Izvēlēties izmēru",
+      "font_size": "Fonta izmērs",
+      "font_size_default": "Noklusējums"
     },
     "send_filing_warning": "Nosūtīts - bet pēcapstrāde neizdevās, var palikt novecojis melnraksts."
   },

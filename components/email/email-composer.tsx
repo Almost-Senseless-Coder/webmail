@@ -37,7 +37,7 @@ import { TemplatePicker } from "@/components/templates/template-picker";
 import { TemplateForm } from "@/components/templates/template-form";
 import type { EmailTemplate } from "@/lib/template-types";
 import { appendPlainTextSignature, getPlainTextSignature, plainTextBodyHasSignature, plainTextBodyWithoutSignature } from "@/lib/signature-utils";
-import { findComposeIdentityId, findDraftIdentityId, resolveReplyFrom } from "@/lib/reply-identity";
+import { findComposeIdentityId, findDraftIdentityId, findReplyIdentityId, resolveReplyFrom } from "@/lib/reply-identity";
 import { buildReplyRecipients, isSelfSent } from "@/lib/reply-recipients";
 import { computeReplyThreadingHeaders } from "@/lib/email-threading";
 import { RequestTimeoutError } from "@/lib/jmap/client";
@@ -180,11 +180,12 @@ interface EmailComposerProps {
   mode?: 'compose' | 'reply' | 'replyAll' | 'forward';
   /**
    * Email of the mailbox/account the user is viewing when they start a new
-   * message. When set (and `autoSelectReplyIdentity` is on), a fresh compose
-   * preselects the identity matching this address instead of the primary
-   * identity, so "New message" from info@ defaults its From to info@. Mirrors
-   * the reply-time identity match; ignored for reply/replyAll/forward (those
-   * resolve from the original recipients).
+   * message. When set, a fresh compose preselects the identity matching this
+   * address instead of the primary identity, so "New message" from info@
+   * defaults its From to info@. It matches the user's OWN identities only and
+   * is therefore not gated on `autoSelectReplyIdentity`, which gates the
+   * catch-all From rewrite. Mirrors the reply-time identity match; ignored for
+   * reply/replyAll/forward (those resolve from the original recipients).
    */
   composeFromAccountEmail?: string;
   replyTo?: {
@@ -331,6 +332,19 @@ export function EmailComposer({
     ? multiAccountIdentities.groups
     : [];
   const primaryIdentity = activeIdentities[0] ?? null;
+  const activeAccountId = useAuthStore((s) => s.activeAccountId);
+  // Automatic selection stays on the active account: `composerClient` follows
+  // the chosen identity, and a reply/forward still carries the original
+  // message's blobIds, which only its own account's server can resolve. The
+  // From dropdown keeps offering every account's identities to pick by hand.
+  const sameAccountIdentities = useMemo(
+    () => (multiAccountIdentities.enabled
+      ? identities.filter(
+          (identity) => stripCrossAccountIdentityPrefix(identity.id).localAccountId === activeAccountId,
+        )
+      : identities),
+    [multiAccountIdentities.enabled, identities, activeAccountId],
+  );
 
   const { isFeatureEnabled } = usePolicyStore();
   const templatesEnabled = isFeatureEnabled('templatesEnabled');
@@ -799,8 +813,12 @@ export function EmailComposer({
     setShowSendMenu(false);
   }, []);
 
+  // `autoSelectReplyIdentity` fused two behaviours: matching one of the user's
+  // OWN identities, which never rewrites `From:`, and the domain catch-all,
+  // which puts an address they have not configured into `From:`. Only the
+  // first is safe for everyone, so it is unconditional here; the rewrite stays
+  // behind the setting, which is what the setting's description promises.
   useEffect(() => {
-    if (!autoSelectReplyIdentity) return;
     if (selectedIdentityId || initialData?.selectedIdentityId) return;
 
     // New message started from a specific mailbox/account: default the From to
@@ -808,6 +826,11 @@ export function EmailComposer({
     // viewing info@ sends as info@. Reply/forward fall through to the
     // recipient-based resolution below.
     if (mode === 'compose') {
+      // Still gated. `composeFromAccountEmail` falls back to `AccountEntry.email`,
+      // which is written once at first login, so resolving it unconditionally
+      // would override a user-chosen default sender identity (#507) on every
+      // new message.
+      if (!autoSelectReplyIdentity) return;
       const composeIdentityId = findComposeIdentityId(identities, composeFromAccountEmail);
       if (composeIdentityId) {
         setSelectedIdentityId(composeIdentityId);
@@ -815,7 +838,10 @@ export function EmailComposer({
       return;
     }
 
-    if (mode !== 'reply' && mode !== 'replyAll') return;
+    // `forward` resolves like a reply: the address the original was delivered to
+    // is the one to send from. The comment above already promised it, and the
+    // neighbouring inline-image effect groups all three modes together.
+    if (mode !== 'reply' && mode !== 'replyAll' && mode !== 'forward') return;
 
     // Replying to our own message in a thread (#703): keep sending as the
     // identity that sent it. Resolving from the recipients here would pick the
@@ -829,20 +855,35 @@ export function EmailComposer({
       }
     }
 
-    const resolved = resolveReplyFrom(identities, {
+    const recipients = {
       to: replyTo?.to,
       cc: replyTo?.cc,
       bcc: replyTo?.bcc,
-    });
+    };
 
-    if (resolved) {
-      setSelectedIdentityId(resolved.identityId);
-      if (resolved.overrideEmail && !fromOverrideEnabled) {
-        setFromOverrideEnabled(true);
-        setFromOverrideEmail(resolved.overrideEmail);
-        if (resolved.overrideName) setFromOverrideName(resolved.overrideName);
-      }
+    // Own-identity match: unconditional, since it only ever selects one of the
+    // user's own configured addresses.
+    const ownIdentityId = findReplyIdentityId(sameAccountIdentities, recipients);
+    if (ownIdentityId) {
+      setSelectedIdentityId(ownIdentityId);
       return;
+    }
+
+    // Catch-all From rewrite: opt-in, and never on a forward. A reply continues
+    // a thread whose participants already know the addressing; a forward
+    // introduces the rewritten From to a recipient the user just typed, who has
+    // no way to tell it is not really from that person.
+    if (autoSelectReplyIdentity && mode !== 'forward') {
+      const resolved = resolveReplyFrom(identities, recipients);
+      if (resolved) {
+        setSelectedIdentityId(resolved.identityId);
+        if (resolved.overrideEmail && !fromOverrideEnabled) {
+          setFromOverrideEnabled(true);
+          setFromOverrideEmail(resolved.overrideEmail);
+          if (resolved.overrideName) setFromOverrideName(resolved.overrideName);
+        }
+        return;
+      }
     }
 
     // Fallback: match identity by the account's email when replying from unified view
@@ -863,6 +904,7 @@ export function EmailComposer({
     composeFromAccountEmail,
     fromOverrideEnabled,
     identities,
+    sameAccountIdentities,
     initialData?.selectedIdentityId,
     mode,
     replyTo?.accountId,

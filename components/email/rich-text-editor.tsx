@@ -375,10 +375,12 @@ export function RichTextEditor({
   return (
     <div className={cn("flex flex-col", hasError && "ring-2 ring-red-500 dark:ring-red-400 rounded", className)}>
       {/* Toolbar - sticky within the composer's scroll container so it stays
-          visible while editing long bodies (the fields section scrolls away
-          above it; the opaque background keeps body text from bleeding
-          through while pinned). */}
-      <div className="sticky top-0 z-20 flex flex-wrap items-center gap-0.5 px-3 py-1.5 border-b border-border/50 bg-muted">
+          visible while editing long bodies. The resting look matches main
+          (bg-muted/30); once the toolbar actually pins against the top of the
+          scroll container, the backdrop-blur + translucent muted overlay keeps
+          body text from bleeding through while staying visually identical to
+          the translucent background. */}
+      <div className="sticky top-0 z-20 flex flex-wrap items-center gap-0.5 px-3 py-1.5 border-b border-border/50 bg-muted/30 backdrop-blur-sm supports-[backdrop-filter]:bg-muted/70">
         {/* Font size */}
         <div ref={fontSizeWrapperRef} className="relative">
           <ToolbarButton
@@ -386,7 +388,7 @@ export function RichTextEditor({
             onClick={() => setFontSizeMenuOpen((v) => !v)}
             title={tToolbar("font_size")}
           >
-            <span className="text-xs font-medium min-w-6 text-center">
+            <span className="text-xs font-medium min-w-6 text-center leading-4">
               {currentFontSize ? currentFontSize.replace("px", "") : "Aa"}
             </span>
           </ToolbarButton>

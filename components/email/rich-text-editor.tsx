@@ -129,15 +129,6 @@ const TEXT_COLORS = [
   "#7627bb", "#c2185b", "#795548", "#fa5252", "#fd7e14", "#40c057", "#4dabf7", "#e64980",
 ];
 
-// Highlighter presets (2 x 8) - soft, text-legible tints rather than the
-// fully-saturated TEXT_COLORS, so highlighted text stays readable.
-// Inline `style="background-color: …"` survives email round-trips the same
-// way `color` does; the BackgroundColor extension preserves pasted ones.
-const BACKGROUND_COLORS = [
-  "#fef3c7", "#fee2e2", "#dcfce7", "#dbeafe", "#fae8ff", "#ffe4e6", "#ecfccb", "#f1f5f9",
-  "#fde68a", "#fecaca", "#bbf7d0", "#bfdbfe", "#f5d0fe", "#ffd6e7", "#e7f9c4", "#e2e8f0",
-];
-
 function TableSizePicker({ onPick }: { onPick: (rows: number, cols: number) => void }) {
   const t = useTranslations("email_composer.toolbar");
   const [hover, setHover] = useState<{ r: number; c: number } | null>(null);
@@ -533,8 +524,11 @@ export function RichTextEditor({
             </div>
           )}
         </div>
-        {/* Background color - same shape as the text-colour control: the
-            highlighter glyph previews the active tint on its little bar. */}
+        {/* Background color - same palette, same grid and same swatch
+            styling as the text-colour picker above, so the two controls
+            read as siblings. The highlighter glyph previews the active
+            tint on its little bar. Inline style="background-color: …"
+            survives email round-trips like `color` does. */}
         <div ref={bgColorWrapperRef} className="relative">
           <ToolbarButton
             active={!!currentBgColor}
@@ -553,7 +547,7 @@ export function RichTextEditor({
           {bgColorMenuOpen && (
             <div className="absolute z-50 top-full start-0 mt-1 bg-popover border border-border rounded-md shadow-md p-2">
               <div className="grid gap-0.5" style={{ gridTemplateColumns: "repeat(8, 1fr)" }}>
-                {BACKGROUND_COLORS.map((color) => (
+                {TEXT_COLORS.map((color) => (
                   <button
                     key={color}
                     type="button"

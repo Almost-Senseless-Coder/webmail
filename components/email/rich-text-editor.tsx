@@ -46,7 +46,6 @@ import {
   Table as TableIcon,
   Baseline,
   Highlighter,
-  ALargeSmall,
   Trash2,
   Rows3,
   Columns3,
@@ -408,22 +407,24 @@ export function RichTextEditor({
           extra opaque overlay (an always-on stronger overlay would read darker
           than main even at rest). */}
       <div className="sticky top-0 z-20 flex flex-wrap items-center gap-0.5 px-3 py-1.5 border-b border-border/50 bg-muted/30 backdrop-blur-sm">
-        {/* Font size - big-A/small-A glyph reads as "size" at a glance,
-            with the active size as a small live badge. */}
+        {/* Font size - two baseline-aligned A's read as "size" at a glance;
+            once a size is chosen the button shows that number instead. */}
         <div ref={fontSizeWrapperRef} className="relative">
           <ToolbarButton
             active={fontSizeMenuOpen || !!currentFontSize}
             onClick={() => setFontSizeMenuOpen((v) => !v)}
             title={tToolbar("font_size")}
           >
-            <span className="relative inline-flex items-center justify-center">
-              <ALargeSmall className="w-4 h-4" />
-              {currentFontSize && (
-                <span className="absolute -bottom-1 -end-1 text-[8px] font-semibold leading-none text-primary">
-                  {currentFontSize.replace("px", "")}
-                </span>
-              )}
-            </span>
+            {currentFontSize ? (
+              <span className="text-xs font-semibold min-w-6 text-center leading-4 tabular-nums">
+                {currentFontSize.replace("px", "")}
+              </span>
+            ) : (
+              <span className="flex items-baseline justify-center leading-none" aria-hidden>
+                <span className="text-sm font-semibold">A</span>
+                <span className="text-[9px] font-semibold">A</span>
+              </span>
+            )}
           </ToolbarButton>
           {fontSizeMenuOpen && (
             <div className="absolute z-50 top-full start-0 mt-1 bg-popover border border-border rounded-md shadow-md p-1 min-w-[64px]">

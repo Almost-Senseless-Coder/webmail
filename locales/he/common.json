@@ -695,7 +695,9 @@
       "delete_table": "מחיקת טבלה",
       "pick_size": "בחירת גודל",
       "font_size": "גודל גופן",
-      "font_size_default": "ברירת מחדל"
+      "font_size_default": "ברירת מחדל",
+      "background_color": "צבע רקע",
+      "remove_background_color": "הסר צבע רקע"
     },
     "send_filing_warning": "נשלח - אך הניקוי שלאחר השליחה נכשל, ייתכן שתישאר טיוטה ישנה."
   },

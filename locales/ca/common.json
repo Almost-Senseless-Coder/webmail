@@ -730,7 +730,9 @@
       "delete_table": "Elimina la taula",
       "pick_size": "Tria la mida",
       "font_size": "Mida de la lletra",
-      "font_size_default": "Per defecte"
+      "font_size_default": "Per defecte",
+      "background_color": "Color de fons",
+      "remove_background_color": "Elimina el color de fons"
     },
     "send_filing_warning": "Enviat, però la neteja posterior a l'enviament ha fallat; és possible que quedi un esborrany obsolet."
   },

@@ -730,7 +730,9 @@
       "delete_table": "Хүснэгт устгах",
       "pick_size": "Хэмжээ сонгох",
       "font_size": "Фонтын хэмжээ",
-      "font_size_default": "Үндсэн"
+      "font_size_default": "Үндсэн",
+      "background_color": "Дэвсгэр өнгө",
+      "remove_background_color": "Дэвсгэр өнгийг арилгах"
     },
     "send_filing_warning": "Илгээсэн - гэхдээ илгээсний дараах цэвэрлэгээ амжилтгүй болсон тул хуучирсан ноорог үлдэж болзошгүй."
   },

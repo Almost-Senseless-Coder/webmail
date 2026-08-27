@@ -730,7 +730,9 @@
       "delete_table": "Táblázat törlése",
       "pick_size": "Méret kiválasztása",
       "font_size": "Betűméret",
-      "font_size_default": "Alapértelmezett"
+      "font_size_default": "Alapértelmezett",
+      "background_color": "Háttérszín",
+      "remove_background_color": "Háttérszín eltávolítása"
     },
     "send_filing_warning": "Elküldve - de az utólagos rendrakás nem sikerült, egy elavult piszkozat megmaradhat."
   },

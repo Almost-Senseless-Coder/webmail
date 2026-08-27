@@ -730,7 +730,9 @@
       "delete_table": "Supprimer le tableau",
       "pick_size": "Choisir la taille",
       "font_size": "Taille de police",
-      "font_size_default": "Par défaut"
+      "font_size_default": "Par défaut",
+      "background_color": "Couleur d'arrière-plan",
+      "remove_background_color": "Supprimer la couleur d'arrière-plan"
     },
     "send_filing_warning": "Envoyé - mais le nettoyage après envoi a échoué, un ancien brouillon peut subsister."
   },

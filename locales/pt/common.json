@@ -730,7 +730,9 @@
       "delete_table": "Excluir tabela",
       "pick_size": "Escolher tamanho",
       "font_size": "Tamanho da fonte",
-      "font_size_default": "Padrão"
+      "font_size_default": "Padrão",
+      "background_color": "Cor de fundo",
+      "remove_background_color": "Remover cor de fundo"
     },
     "send_filing_warning": "Enviado - mas a limpeza posterior falhou, um rascunho antigo pode permanecer."
   },

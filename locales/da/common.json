@@ -730,7 +730,9 @@
       "delete_table": "Slet tabel",
       "pick_size": "Vælg størrelse",
       "font_size": "Skriftstørrelse",
-      "font_size_default": "Standard"
+      "font_size_default": "Standard",
+      "background_color": "Baggrundsfarve",
+      "remove_background_color": "Fjern baggrundsfarve"
     },
     "send_filing_warning": "Sendt - men oprydningen bagefter mislykkedes, en forældet kladde kan blive stående."
   },

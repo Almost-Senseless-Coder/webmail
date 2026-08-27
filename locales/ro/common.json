@@ -730,7 +730,9 @@
       "delete_table": "Șterge tabelul",
       "pick_size": "Alege dimensiunea",
       "font_size": "Dimensiune font",
-      "font_size_default": "Implicit"
+      "font_size_default": "Implicit",
+      "background_color": "Culoarea fundalului",
+      "remove_background_color": "Elimină culoarea fundalului"
     },
     "send_filing_warning": "Trimis - dar curățarea ulterioară a eșuat, poate rămâne o ciornă veche."
   },

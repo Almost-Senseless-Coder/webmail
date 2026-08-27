@@ -730,7 +730,9 @@
       "delete_table": "Tabloyu sil",
       "pick_size": "Boyut seç",
       "font_size": "Yazı boyutu",
-      "font_size_default": "Varsayılan"
+      "font_size_default": "Varsayılan",
+      "background_color": "Arka plan rengi",
+      "remove_background_color": "Arka plan rengini kaldır"
     },
     "send_filing_warning": "Gönderildi - ancak sonrasındaki temizleme başarısız oldu, eski bir taslak kalabilir."
   },

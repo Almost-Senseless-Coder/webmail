@@ -730,7 +730,9 @@
       "delete_table": "Odstranit tabulku",
       "pick_size": "Vybrat velikost",
       "font_size": "Velikost písma",
-      "font_size_default": "Výchozí"
+      "font_size_default": "Výchozí",
+      "background_color": "Barva pozadí",
+      "remove_background_color": "Odebrat barvu pozadí"
     },
     "send_filing_warning": "Odesláno - ale následný úklid selhal, může zůstat zastaralý koncept."
   },

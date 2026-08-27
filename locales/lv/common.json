@@ -730,7 +730,9 @@
       "delete_table": "Dzēst tabulu",
       "pick_size": "Izvēlēties izmēru",
       "font_size": "Fonta izmērs",
-      "font_size_default": "Noklusējums"
+      "font_size_default": "Noklusējums",
+      "background_color": "Fona krāsa",
+      "remove_background_color": "Noņemt fona krāsu"
     },
     "send_filing_warning": "Nosūtīts - bet pēcapstrāde neizdevās, var palikt novecojis melnraksts."
   },

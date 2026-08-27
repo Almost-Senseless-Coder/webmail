@@ -730,7 +730,9 @@
       "delete_table": "Elimina tabella",
       "pick_size": "Scegli dimensione",
       "font_size": "Dimensione carattere",
-      "font_size_default": "Predefinita"
+      "font_size_default": "Predefinita",
+      "background_color": "Colore di sfondo",
+      "remove_background_color": "Rimuovi colore di sfondo"
     },
     "send_filing_warning": "Inviato - ma la pulizia successiva non è riuscita, potrebbe restare una bozza obsoleta."
   },

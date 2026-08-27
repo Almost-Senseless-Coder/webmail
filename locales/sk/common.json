@@ -730,7 +730,9 @@
       "delete_table": "Odstrániť tabuľku",
       "pick_size": "Vybrať veľkosť",
       "font_size": "Veľkosť písma",
-      "font_size_default": "Predvolené"
+      "font_size_default": "Predvolené",
+      "background_color": "Farba pozadia",
+      "remove_background_color": "Odstrániť farbu pozadia"
     },
     "send_filing_warning": "Odoslané - ale následné upratovanie zlyhalo, môže zostať zastaraný koncept."
   },

@@ -730,7 +730,9 @@
       "delete_table": "Usuń tabelę",
       "pick_size": "Wybierz rozmiar",
       "font_size": "Rozmiar czcionki",
-      "font_size_default": "Domyślny"
+      "font_size_default": "Domyślny",
+      "background_color": "Kolor tła",
+      "remove_background_color": "Usuń kolor tła"
     },
     "send_filing_warning": "Wysłano - ale późniejsze porządkowanie nie powiodło się, może pozostać nieaktualna wersja robocza."
   },

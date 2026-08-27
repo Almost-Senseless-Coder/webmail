@@ -730,7 +730,9 @@
       "delete_table": "表を削除",
       "pick_size": "サイズを選択",
       "font_size": "文字サイズ",
-      "font_size_default": "デフォルト"
+      "font_size_default": "デフォルト",
+      "background_color": "背景色",
+      "remove_background_color": "背景色を削除"
     },
     "send_filing_warning": "送信されましたが、送信後の整理に失敗しました。古い下書きが残る場合があります。"
   },

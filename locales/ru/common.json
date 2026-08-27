@@ -730,7 +730,9 @@
       "delete_table": "Удалить таблицу",
       "pick_size": "Выбрать размер",
       "font_size": "Размер шрифта",
-      "font_size_default": "По умолчанию"
+      "font_size_default": "По умолчанию",
+      "background_color": "Цвет фона",
+      "remove_background_color": "Убрать цвет фона"
     },
     "send_filing_warning": "Отправлено - но последующая очистка не удалась, может остаться устаревший черновик."
   },

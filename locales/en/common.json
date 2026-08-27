@@ -730,7 +730,9 @@
       "delete_table": "Delete table",
       "pick_size": "Pick size",
       "font_size": "Font size",
-      "font_size_default": "Default"
+      "font_size_default": "Default",
+      "background_color": "Background color",
+      "remove_background_color": "Remove background color"
     },
     "send_filing_warning": "Sent - but the post-send cleanup failed, a stale draft may remain."
   },

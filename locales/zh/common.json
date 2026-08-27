@@ -730,7 +730,9 @@
       "delete_table": "删除表格",
       "pick_size": "选择大小",
       "font_size": "字号",
-      "font_size_default": "默认"
+      "font_size_default": "默认",
+      "background_color": "背景颜色",
+      "remove_background_color": "移除背景颜色"
     },
     "send_filing_warning": "已发送，但发送后的清理失败，可能会残留旧草稿。"
   },

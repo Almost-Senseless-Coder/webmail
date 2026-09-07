@@ -579,6 +579,28 @@ export class ArchiveMailboxNotFoundError extends Error {
   }
 }
 
+/**
+ * Archive folder for a single-email or batch archive.
+ *
+ * `accountId` pins the owning account (unified view). Otherwise the selected
+ * mailbox decides: a shared/group folder scopes the lookup to its owner, an own
+ * folder to non-shared mailboxes. The user's own Archive is listed first in the
+ * merged own+shared list, so an unscoped `find` would pair the shared owner's
+ * accountId with a foreign mailbox id and Stalwart rejects the move. (#889)
+ */
+export function findArchiveMailbox(
+  mailboxes: Mailbox[],
+  selectedMailboxId: string | null | undefined,
+  accountId?: string,
+): Mailbox | undefined {
+  const viewMailbox = mailboxes.find(m => m.id === selectedMailboxId);
+  const scopeId = accountId ?? (viewMailbox?.isShared ? viewMailbox.accountId : undefined);
+  const isArchive = (m: Mailbox) => m.role === 'archive' || m.name.toLowerCase() === 'archive';
+  return mailboxes.find(m =>
+    isArchive(m) && (scopeId ? m.accountId === scopeId : !m.isShared)
+  );
+}
+
 function resolveActionMailboxes(): Mailbox[] {
   const state = useEmailStore.getState();
   if (state.viewingAccountId) {
@@ -3095,11 +3117,7 @@ export const useEmailStore = create<EmailStore>((set, get) => ({
     // Scope the archive folder to the viewed shared/group account (if any) so the
     // move lands on the owner account, not the user's own archive (which appears
     // first in the merged list); see resolveViewAccountId. Own view is unchanged.
-    const viewAccountId = resolveViewAccountId();
-    const isArchive = (m: Mailbox) => m.role === 'archive' || m.name.toLowerCase() === 'archive';
-    const archiveMailbox = mailboxes.find(m =>
-      isArchive(m) && (viewAccountId ? m.accountId === viewAccountId : !m.isShared)
-    );
+    const archiveMailbox = findArchiveMailbox(mailboxes, get().selectedMailbox);
     if (!archiveMailbox) {
       const error = new ArchiveMailboxNotFoundError();
       set({ error: error.message });

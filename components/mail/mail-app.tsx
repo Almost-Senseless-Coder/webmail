@@ -31,7 +31,7 @@ import { usePolicyStore } from "@/stores/policy-store";
 import type { UnifiedAccountClient } from "@/lib/unified-mailbox";
 import { connectedAccountsGrew } from "@/lib/unified-mailbox";
 import { KeyboardShortcutsModal } from "@/components/keyboard-shortcuts-modal";
-import { useEmailStore, buildUnifiedAccountClients, ArchiveMailboxNotFoundError } from "@/stores/email-store";
+import { useEmailStore, buildUnifiedAccountClients, ArchiveMailboxNotFoundError, findArchiveMailbox } from "@/stores/email-store";
 import { toast } from "@/stores/toast-store";
 import { MailboxShareDialog } from "@/components/layout/mailbox-share-dialog";
 import { ShareNotificationToaster } from "@/components/layout/share-notification-toaster";
@@ -2208,7 +2208,9 @@ export function MailApp({ linkSegments }: MailAppProps = {}) {
 
     const currentMailboxes = readMailboxes();
 
-    const archiveMailbox = currentMailboxes.find(m => m.role === "archive" || m.name.toLowerCase() === "archive");
+    // Scope like batchArchive: the owning account in unified view, otherwise
+    // the selected shared folder's owner, otherwise the user's own archive. (#889)
+    const archiveMailbox = findArchiveMailbox(currentMailboxes, selectedMailbox, archiveAccountId);
     if (!archiveMailbox) {
       const { toast } = await import('sonner');
       toast.error(t('email_viewer.archive_mailbox_not_found'));
@@ -2258,6 +2260,8 @@ export function MailApp({ linkSegments }: MailAppProps = {}) {
       void refreshMailboxes();
     } catch (error) {
       console.error("Failed to archive email:", error);
+      const { toast } = await import('sonner');
+      toast.error(error instanceof Error ? error.message : 'Failed to archive email');
     }
   };
 

@@ -3158,8 +3158,16 @@ export const useEmailStore = create<EmailStore>((set, get) => ({
 
   // Spam operations
   markAsSpam: async (client, emailId) => {
-    const email = get().emails.find(e => e.id === emailId);
-    if (!email) return;
+    // The viewer may show an email the list no longer holds (e.g. the unread
+    // quick-filter dropped it once it was read), so fall back to the selected
+    // email like moveThreadToMailbox does. Throw rather than no-op so the
+    // caller's success toast cannot fire for a message that was not moved. (#695)
+    const state = get();
+    const email = state.emails.find(e => e.id === emailId)
+      ?? (state.selectedEmail?.id === emailId ? state.selectedEmail : null);
+    if (!email) {
+      throw new Error('Email not found - cannot mark as spam');
+    }
 
     // In unified view route to the email's own account (client + that account's
     // mailbox list); otherwise the active/viewing context. (#281)

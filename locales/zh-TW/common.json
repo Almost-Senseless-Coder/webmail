@@ -202,6 +202,9 @@
     "delete_confirm": "您確定要刪除「{name}」嗎？",
     "no_apps": "尚未新增任何應用程式",
     "no_apps_hint": "在側邊欄新增自訂應用程式與連結",
+    "managed_title": "由您的管理員提供",
+    "managed_description": "這些應用程式為所有人統一設定，無法變更。",
+    "managed_badge": "受管理",
     "search_icons": "搜尋圖示…",
     "show_popular": "熱門",
     "show_all": "全部",
@@ -1878,6 +1881,8 @@
       "description": "管理側邊欄中的自訂應用程式與連結",
       "keep_loaded": "保持應用程式載入",
       "keep_loaded_description": "切換內嵌應用程式時，讓其在背景繼續執行，以避免重新載入",
+      "managed_title": "由您的管理員提供",
+      "managed_description": "這些應用程式為所有人統一設定，無法變更。",
       "manage_title": "自訂應用程式",
       "manage_description": "在側邊欄新增、編輯或移除自訂應用程式"
     },

@@ -2308,37 +2308,65 @@ export class JMAPClient implements IJMAPClient {
     return { migrated, refused: refusals };
   }
 
+  /**
+   * Reject an Email/set response that reports a method-level error or per-id
+   * `notUpdated`/`notDestroyed` failures. `request()` only throws on HTTP
+   * errors, so without this the store removes rows the server refused. (#956)
+   */
+  private assertEmailSetSucceeded(response: JMAPResponse, action: string): void {
+    const [name, result] = response.methodResponses?.[0] ?? [];
+    if (name === "error") {
+      throw new Error(`Failed to ${action}: ${result?.description || result?.type || 'unknown error'}`);
+    }
+    const failed: Record<string, { type?: string; description?: string }> = {
+      ...(result?.notUpdated ?? {}),
+      ...(result?.notDestroyed ?? {}),
+    };
+    const failedIds = Object.keys(failed);
+    if (failedIds.length === 0) return;
+    const first = failed[failedIds[0]];
+    const reason = first?.description || first?.type || 'unknown error';
+    throw new Error(
+      failedIds.length === 1
+        ? `Failed to ${action}: ${reason}`
+        : `Failed to ${action} ${failedIds.length} email(s); first error: ${reason}`,
+    );
+  }
+
   async deleteEmail(emailId: string, accountId?: string): Promise<void> {
-    await this.request([
+    const response = await this.request([
       ["Email/set", {
         accountId: accountId || this.accountId,
         destroy: [emailId],
       }, "0"],
     ]);
+    this.assertEmailSetSucceeded(response, 'delete email');
   }
 
   async moveToTrash(emailId: string, trashMailboxId: string, accountId?: string, markAsRead?: boolean): Promise<void> {
     const targetAccountId = accountId || this.accountId;
     const patch: Record<string, unknown> = { mailboxIds: { [trashMailboxId]: true } };
     if (markAsRead) patch["keywords/$seen"] = true;
-    await this.request([
+    const response = await this.request([
       ["Email/set", {
         accountId: targetAccountId,
         update: { [emailId]: patch },
       }, "0"],
     ]);
+    this.assertEmailSetSucceeded(response, 'move email to trash');
   }
 
   async batchDeleteEmails(emailIds: string[], accountId?: string): Promise<void> {
     if (emailIds.length === 0) return;
 
     for (const batch of batched(emailIds, this.getMaxObjectsInSet())) {
-      await this.request([
+      const response = await this.request([
         ["Email/set", {
           accountId: accountId || this.accountId,
           destroy: batch,
         }, "0"],
       ]);
+      this.assertEmailSetSucceeded(response, 'delete emails');
     }
   }
 
@@ -2352,9 +2380,10 @@ export class JMAPClient implements IJMAPClient {
     };
     for (const batch of batched(emailIds, this.getMaxObjectsInSet())) {
       const updates = Object.fromEntries(batch.map(id => [id, buildPatch()]));
-      await this.request([
+      const response = await this.request([
         ["Email/set", { accountId: accountId || this.accountId, update: updates }, "0"],
       ]);
+      this.assertEmailSetSucceeded(response, 'move emails');
     }
   }
 

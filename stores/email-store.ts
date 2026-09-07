@@ -2020,8 +2020,8 @@ export const useEmailStore = create<EmailStore>((set, get) => ({
         throw new Error('Trash mailbox not found - cannot move email to trash');
       }
 
-      // Permanent delete
-      await effectiveClient.deleteEmail(emailId);
+      // Permanent delete - in the email's own account, like the batch path.
+      await effectiveClient.deleteEmail(emailId, accountId);
 
       // Remove from local state and update mailbox counters (in the email's own
       // account list). Unread emails also decrement the unread counters. (#281)

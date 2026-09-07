@@ -2691,7 +2691,10 @@ export class JMAPClient implements IJMAPClient {
   async createMailbox(name: string, parentId?: string, accountId?: string): Promise<Mailbox> {
     const targetAccountId = accountId || this.accountId;
     const createId = `new-${Date.now()}`;
-    const createData: Record<string, unknown> = { name };
+    // Subscribe explicitly: IMAP clients that list folders via LSUB
+    // (Thunderbird) hide unsubscribed mailboxes, and the server default is
+    // not guaranteed to be true. (#951)
+    const createData: Record<string, unknown> = { name, isSubscribed: true };
     if (parentId) {
       createData.parentId = parentId;
     }

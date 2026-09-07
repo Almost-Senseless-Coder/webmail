@@ -3573,7 +3573,13 @@ export function EmailViewer({
         "flex flex-col",
         moreMenuOpen ? "translate-x-0" : "translate-x-full"
       )}>
-        <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+        {/* The fixed panel spans the full viewport height, so in the iOS PWA
+            its header would sit under the status bar without the safe-area
+            inset (same treatment as the preview modals). (#936) */}
+        <div className={cn(
+          "flex items-center justify-between px-4 border-b border-border",
+          isPaneScoped ? "py-3" : "pb-3 pt-[calc(0.75rem+env(safe-area-inset-top))]"
+        )}>
           {moreMenuSub ? (
             <button
               ref={mobileSubBackRef}

@@ -601,6 +601,27 @@ export function findArchiveMailbox(
   );
 }
 
+/**
+ * JMAP accountId for opening an email that carries no source stamps.
+ *
+ * Normally the selected folder decides: a shared/group folder's owner, else
+ * the account's own (undefined). During an unscoped ("All folders") search
+ * the hits come from the primary account even while a shared folder is
+ * selected, so deriving the owner from that folder asks the wrong account and
+ * `getEmail` returns nothing. In that case the caller's own account is used
+ * (searching the shared owners too is a separate issue). (#923)
+ */
+export function resolveUnstampedEmailAccountId(opts: {
+  mailboxes: Mailbox[];
+  selectedMailbox: string | null | undefined;
+  searchActive: boolean;
+  searchMailboxId: string;
+}): string | undefined {
+  if (opts.searchActive && opts.searchMailboxId === '') return undefined;
+  const mailbox = opts.mailboxes.find(mb => mb.id === opts.selectedMailbox);
+  return mailbox?.isShared ? mailbox.accountId : undefined;
+}
+
 function resolveActionMailboxes(): Mailbox[] {
   const state = useEmailStore.getState();
   if (state.viewingAccountId) {

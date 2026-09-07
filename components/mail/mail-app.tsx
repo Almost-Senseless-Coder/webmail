@@ -31,7 +31,7 @@ import { usePolicyStore } from "@/stores/policy-store";
 import type { UnifiedAccountClient } from "@/lib/unified-mailbox";
 import { connectedAccountsGrew } from "@/lib/unified-mailbox";
 import { KeyboardShortcutsModal } from "@/components/keyboard-shortcuts-modal";
-import { useEmailStore, buildUnifiedAccountClients, ArchiveMailboxNotFoundError, findArchiveMailbox } from "@/stores/email-store";
+import { useEmailStore, buildUnifiedAccountClients, ArchiveMailboxNotFoundError, findArchiveMailbox, resolveUnstampedEmailAccountId } from "@/stores/email-store";
 import { toast } from "@/stores/toast-store";
 import { MailboxShareDialog } from "@/components/layout/mailbox-share-dialog";
 import { ShareNotificationToaster } from "@/components/layout/share-notification-toaster";
@@ -3289,11 +3289,15 @@ export function MailApp({ linkSegments }: MailAppProps = {}) {
         ?? (viewingAccountId ? useAuthStore.getState().getClientForAccount(viewingAccountId) : undefined)
         ?? client;
 
+      // During an unscoped search the hit is the primary account's, not the
+      // selected shared folder's owner - see resolveUnstampedEmailAccountId. (#923)
       const accountId = listEmail?.sourceAccountId
-        ?? (() => {
-            const mailbox = viewMailboxes.find(mb => mb.id === selectedMailbox);
-            return mailbox?.isShared ? mailbox.accountId : undefined;
-          })();
+        ?? resolveUnstampedEmailAccountId({
+            mailboxes: viewMailboxes,
+            selectedMailbox,
+            searchActive: !!searchQuery || !isFilterEmpty(searchFilters),
+            searchMailboxId,
+          });
 
       const fullEmail = await fetchClient.getEmail(email.id, accountId);
       if (fullEmail) {

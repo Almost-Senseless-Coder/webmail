@@ -692,6 +692,12 @@ export function EmailComposer({
   const composerClient = currentIdentityParts.localAccountId
     ? (useAuthStore.getState().getClientForAccount(currentIdentityParts.localAccountId) ?? client)
     : client;
+  // The upload callbacks below list only `client` as a dependency, so they read
+  // the composing identity's client through a ref: uploads must land in the
+  // account that owns the draft, and a direct substitution would capture a
+  // stale client. (#943)
+  const composerClientRef = useRef(composerClient);
+  composerClientRef.current = composerClient;
   const currentIdentityRawId = currentIdentityParts.rawId ?? currentIdentity?.id;
   // Alias identities often lack a configured signature - fall back to the primary
   // identity's signature so replies (which auto-select a matching alias) still
@@ -1487,7 +1493,7 @@ export function EmailComposer({
 
           // Passing the signal also makes cancel abort the transfer itself,
           // instead of only being checked once the upload has finished.
-          const { blobId } = await client.uploadBlob(newFile, {
+          const { blobId } = await (composerClientRef.current ?? client).uploadBlob(newFile, {
             onProgress: reportProgress,
             signal: controller?.signal,
           });
@@ -1537,7 +1543,7 @@ export function EmailComposer({
         reader.readAsDataURL(file);
       });
       const [{ blobId }, dataUrl] = await Promise.all([
-        client.uploadBlob(file),
+        (composerClientRef.current ?? client).uploadBlob(file),
         readAsDataUrl,
       ]);
       if (!dataUrl) throw new Error('Failed to read image as data URL');

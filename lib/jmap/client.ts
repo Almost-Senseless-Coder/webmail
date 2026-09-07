@@ -949,6 +949,15 @@ export class JMAPClient implements IJMAPClient {
   private async fetchSessionResponse(): Promise<Response> {
     const discoveryUrl = `${this.serverUrl}/.well-known/jmap`;
     const response = await this.authenticatedFetch(discoveryUrl, { method: 'GET' });
+    // A proxy in front of the session URL answers the header-less redirected
+    // request with 401 instead of Stalwart's silent 200 - the credentials are
+    // fine, Safari just dropped them. Retry the final URL directly. (#892)
+    if (response.redirected && response.status === 401) {
+      return fetch(response.url, {
+        method: 'GET',
+        headers: { 'Authorization': this.authHeader },
+      });
+    }
     if (!response.ok || !response.redirected) return response;
 
     const peek = await response.clone().json().catch(() => null);

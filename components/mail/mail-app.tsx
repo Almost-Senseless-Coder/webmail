@@ -821,6 +821,22 @@ export function MailApp({ linkSegments }: MailAppProps = {}) {
     onDeselectAll: () => {
       clearSelection();
     },
+    // `x` in the help modal: expand/collapse the selected email's thread. Same
+    // steps as EmailList.handleToggleThreadExpansion - expanding pulls the
+    // thread's messages and marks them read, collapsing only toggles. (#683)
+    onToggleThreadExpansion: () => {
+      if (isScheduledView || !client) return;
+      const threadId = selectedEmail?.threadId;
+      if (!threadId) return;
+      const store = useEmailStore.getState();
+      const wasExpanded = store.expandedThreadIds.has(threadId);
+      store.toggleThreadExpansion(threadId);
+      if (!wasExpanded) {
+        void store.fetchThreadEmails(client, threadId).then(() => {
+          void useEmailStore.getState().markThreadAsRead(client, threadId);
+        });
+      }
+    },
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }), [activeEmails, selectedEmail, client, selectedMailbox, isMobile, isTablet, selectedEmailIds, mailboxes, isScheduledView]);
 

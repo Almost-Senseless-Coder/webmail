@@ -3218,8 +3218,10 @@ export function EmailViewer({
           <Code className="w-4 h-4" />
         </Button>
 
-        {/* Dark/light mode toggle for HTML emails */}
-        {effectiveEmailContent.isHtml && (
+        {/* Dark/light mode toggle for HTML emails. Always mounted: `isHtml`
+            flips from false to true once the body arrives, and mounting the
+            button then changes the toolbar width and re-runs the overflow
+            calculation, so the other buttons jump. Disable it instead. (#964) */}
         <Button
           variant="ghost"
           size="sm"
@@ -3228,10 +3230,11 @@ export function EmailViewer({
           data-overflow-priority="11"
           className="hidden sm:inline-flex h-8 gap-1.5"
           title={isDark ? 'View in light mode' : 'View in dark mode'}
+          disabled={!effectiveEmailContent.isHtml}
+          aria-disabled={!effectiveEmailContent.isHtml}
         >
           {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
         </Button>
-        )}
 
         {/* Fullscreen toggle - hidden on mobile (already fullscreen there).
             Never overflows into the More menu: in fullscreen this button is

@@ -35,6 +35,16 @@ function domainOf(email: string): string {
   return at > 0 ? email.slice(at + 1).toLowerCase() : '';
 }
 
+/**
+ * Pick the identity a message was delivered to, among the user's own. Never
+ * rewrites `From:` - it only chooses which configured address sends.
+ *
+ * Recipients are scanned in To, then Cc, then Bcc order, exact matches before
+ * `+tag`-stripped ones. Scanning the identities instead would let the identity
+ * list's order decide: `sortIdentities` deliberately puts the login's own
+ * address first, so `To: team@, Cc: you@` would reply as you rather than as
+ * the team - the exact case this is meant to fix.
+ */
 export function findReplyIdentityId(
   identities: Identity[],
   recipients?: ReplyRecipients,
@@ -55,16 +65,38 @@ export function findReplyIdentityId(
     return null;
   }
 
-  const exactMatches = new Set(receivedAddresses.map(normalizeEmailAddress));
-  const exactIdentity = identities.find((identity) => exactMatches.has(normalizeEmailAddress(identity.email)));
-  if (exactIdentity) {
-    return exactIdentity.id;
+  const byExact = new Map<string, string>();
+  const byBase = new Map<string, { id: string; untagged: boolean }>();
+  for (const identity of identities) {
+    const exact = normalizeEmailAddress(identity.email);
+    const base = normalizeBaseEmailAddress(identity.email);
+    if (!byExact.has(exact)) {
+      byExact.set(exact, identity.id);
+    }
+    // For a `+tag` delivery with no exact identity, the untagged identity is the
+    // answer; a differently-tagged sibling would disclose an unrelated tag.
+    const untagged = exact === base;
+    const existing = byBase.get(base);
+    if (!existing || (untagged && !existing.untagged)) {
+      byBase.set(base, { id: identity.id, untagged });
+    }
   }
 
-  const baseMatches = new Set(receivedAddresses.map(normalizeBaseEmailAddress));
-  const baseIdentity = identities.find((identity) => baseMatches.has(normalizeBaseEmailAddress(identity.email)));
+  for (const address of receivedAddresses) {
+    const exactId = byExact.get(normalizeEmailAddress(address));
+    if (exactId) {
+      return exactId;
+    }
+  }
 
-  return baseIdentity?.id ?? null;
+  for (const address of receivedAddresses) {
+    const baseMatch = byBase.get(normalizeBaseEmailAddress(address));
+    if (baseMatch) {
+      return baseMatch.id;
+    }
+  }
+
+  return null;
 }
 
 /**

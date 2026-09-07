@@ -728,7 +728,11 @@
       "delete_column": "Spalte löschen",
       "toggle_header_row": "Kopfzeile umschalten",
       "delete_table": "Tabelle löschen",
-      "pick_size": "Größe wählen"
+      "pick_size": "Größe wählen",
+      "font_size": "Schriftgröße",
+      "font_size_default": "Standard",
+      "background_color": "Hintergrundfarbe",
+      "remove_background_color": "Hintergrundfarbe entfernen"
     },
     "send_filing_warning": "Gesendet - aber das Aufräumen danach schlug fehl, evtl. bleibt ein alter Entwurf sichtbar."
   },

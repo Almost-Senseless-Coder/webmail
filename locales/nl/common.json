@@ -728,7 +728,11 @@
       "delete_column": "Kolom verwijderen",
       "toggle_header_row": "Koprij aan/uit",
       "delete_table": "Tabel verwijderen",
-      "pick_size": "Grootte kiezen"
+      "pick_size": "Grootte kiezen",
+      "font_size": "Lettergrootte",
+      "font_size_default": "Standaard",
+      "background_color": "Achtergrondkleur",
+      "remove_background_color": "Achtergrondkleur verwijderen"
     },
     "send_filing_warning": "Verzonden - maar het opruimen daarna is mislukt, mogelijk blijft een oud concept staan."
   },

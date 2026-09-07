@@ -728,7 +728,11 @@
       "delete_column": "Slett kolonne",
       "toggle_header_row": "Slå overskriftsraden av eller på",
       "delete_table": "Slett tabell",
-      "pick_size": "Velg størrelse"
+      "pick_size": "Velg størrelse",
+      "font_size": "Skriftstørrelse",
+      "font_size_default": "Standard",
+      "background_color": "Bakgrunnsfarge",
+      "remove_background_color": "Fjern bakgrunnsfarge"
     },
     "send_filing_warning": "Meldingen ble sendt, men oppryddingen etterpå mislyktes. Et gammelt utkast kan bli liggende."
   },

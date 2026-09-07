@@ -728,7 +728,11 @@
       "delete_column": "Eliminar columna",
       "toggle_header_row": "Alternar fila de encabezado",
       "delete_table": "Eliminar tabla",
-      "pick_size": "Elegir tamaño"
+      "pick_size": "Elegir tamaño",
+      "font_size": "Tamaño de fuente",
+      "font_size_default": "Predeterminado",
+      "background_color": "Color de fondo",
+      "remove_background_color": "Quitar color de fondo"
     },
     "send_filing_warning": "Enviado - pero la limpieza posterior falló, puede quedar un borrador obsoleto."
   },

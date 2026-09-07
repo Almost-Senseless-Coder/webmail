@@ -2616,9 +2616,10 @@ export function EmailComposer({
         )}
       </div>
 
-      <div className="flex-1 min-h-0 overflow-auto">
-        {/* Fields section */}
-        <div className="space-y-0 border-b">
+      {/* Fields section - outside the scroll container so From/To/Cc/Bcc/
+          Subject stay reachable while scrolling long bodies, matching the
+          pinned formatting toolbar (see rich-text-editor.tsx). */}
+      <div className="shrink-0 space-y-0 border-b">
           {/* From field */}
           <div className="flex items-center gap-2 px-4 py-2.5 border-b border-border/50">
             <span className="text-sm text-muted-foreground w-12 md:w-16 shrink-0">{t('from')}:</span>
@@ -2897,8 +2898,9 @@ export function EmailComposer({
               className="flex-1 border-0 focus-visible:ring-0 h-8 px-0 text-sm"
             />
           </div>
-        </div>
+      </div>
 
+      <div className="flex-1 min-h-0 overflow-auto">
         {/* Body */}
         {plainTextMode ? (
           <textarea

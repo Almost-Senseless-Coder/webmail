@@ -121,12 +121,13 @@ export async function POST(request: NextRequest) {
       authUrl.searchParams.set('ui_locales', locale);
     }
 
-    // Force a fresh credential entry for step-up re-auth. prompt=login and
-    // max_age=0 both ask the IdP to re-authenticate even if it has an active
-    // session; honoring them depends on the IdP supporting these OIDC params.
+    // Force a fresh credential entry for step-up re-auth. prompt=login asks
+    // the IdP to re-authenticate even if it has an active session; honoring it
+    // depends on the IdP supporting this OIDC param. Deliberately no max_age=0:
+    // some IdPs (Authelia) re-evaluate max_age at the consent step and loop
+    // back to login forever, and nothing on our side reads auth_time.
     if (isReauth) {
       authUrl.searchParams.set('prompt', 'login');
-      authUrl.searchParams.set('max_age', '0');
     }
 
     return NextResponse.json({

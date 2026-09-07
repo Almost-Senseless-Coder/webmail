@@ -1327,7 +1327,9 @@ export const useCalendarStore = create<CalendarStore>()(
               events: state.events.filter(e => !e.calendarIds?.[calendarId]),
             }));
           }
-          return null;
+          // Rethrow so the dialog can show the server's reason (size limit,
+          // 404, timeout) instead of a generic failure. (#692)
+          throw error;
         }
       },
 

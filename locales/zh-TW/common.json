@@ -725,7 +725,11 @@
       "delete_column": "刪除欄",
       "toggle_header_row": "切換標題列",
       "delete_table": "刪除表格",
-      "pick_size": "選取大小"
+      "pick_size": "選取大小",
+      "font_size": "字型大小",
+      "font_size_default": "預設",
+      "background_color": "背景顏色",
+      "remove_background_color": "移除背景顏色"
     },
     "send_filing_warning": "郵件已傳送，但寄送後清理失敗，可能仍保留舊草稿。"
   },

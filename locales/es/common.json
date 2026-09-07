@@ -292,6 +292,7 @@
     "forward": "Reenviar",
     "delete": "Eliminar",
     "archive": "Archivar",
+    "archive_mailbox_not_found": "Archive mailbox not found - cannot archive email",
     "star": "Destacar",
     "unstar": "Quitar destacado",
     "mark_unread": "Marcar como no leído",

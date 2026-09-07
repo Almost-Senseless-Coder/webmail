@@ -244,6 +244,7 @@
     "forward": "העבר",
     "delete": "מחיקה",
     "archive": "ארכיון",
+    "archive_mailbox_not_found": "Archive mailbox not found - cannot archive email",
     "star": "כוכב",
     "unstar": "הסר כוכב",
     "mark_unread": "סמן כלא נקרא",

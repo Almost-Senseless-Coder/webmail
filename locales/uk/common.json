@@ -292,6 +292,7 @@
     "forward": "вперед",
     "delete": "Видалити",
     "archive": "Архів",
+    "archive_mailbox_not_found": "Archive mailbox not found - cannot archive email",
     "star": "зірка",
     "unstar": "Зняти зірочку",
     "mark_unread": "Позначити як непрочитане",

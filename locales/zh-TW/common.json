@@ -289,6 +289,7 @@
     "forward": "轉寄",
     "delete": "刪除",
     "archive": "封存",
+    "archive_mailbox_not_found": "Archive mailbox not found - cannot archive email",
     "star": "加上星號",
     "unstar": "移除星號",
     "mark_unread": "標示為未讀",

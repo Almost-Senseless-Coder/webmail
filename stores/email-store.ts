@@ -566,6 +566,19 @@ function resolveActionClient(passedClient: IJMAPClient): IJMAPClient {
   return c ?? passedClient;
 }
 
+/**
+ * Thrown by archive actions when no archive folder exists in the target
+ * account. Callers map it to the translated
+ * `email_viewer.archive_mailbox_not_found` toast; a silent return left the
+ * user with a shortcut/button that did nothing. (#578)
+ */
+export class ArchiveMailboxNotFoundError extends Error {
+  constructor() {
+    super('Archive mailbox not found - cannot archive email');
+    this.name = 'ArchiveMailboxNotFoundError';
+  }
+}
+
 function resolveActionMailboxes(): Mailbox[] {
   const state = useEmailStore.getState();
   if (state.viewingAccountId) {
@@ -3087,7 +3100,11 @@ export const useEmailStore = create<EmailStore>((set, get) => ({
     const archiveMailbox = mailboxes.find(m =>
       isArchive(m) && (viewAccountId ? m.accountId === viewAccountId : !m.isShared)
     );
-    if (!archiveMailbox) return;
+    if (!archiveMailbox) {
+      const error = new ArchiveMailboxNotFoundError();
+      set({ error: error.message });
+      throw error;
+    }
 
     const mode = useSettingsStore.getState().archiveMode;
     const archiveId = archiveMailbox.originalId || archiveMailbox.id;

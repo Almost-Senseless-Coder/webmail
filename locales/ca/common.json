@@ -292,6 +292,7 @@
     "forward": "Reenvia",
     "delete": "Suprimeix",
     "archive": "Arxiva",
+    "archive_mailbox_not_found": "Archive mailbox not found - cannot archive email",
     "star": "Marca amb estrella",
     "unstar": "Treu l'estrella",
     "mark_unread": "Marca com a no llegit",

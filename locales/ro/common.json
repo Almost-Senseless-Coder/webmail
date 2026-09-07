@@ -292,6 +292,7 @@
     "forward": "Redirecționează",
     "delete": "Șterge",
     "archive": "Arhivează",
+    "archive_mailbox_not_found": "Archive mailbox not found - cannot archive email",
     "star": "Stea",
     "unstar": "Anulează marcarea cu stea",
     "mark_unread": "Marcați ca necitit",

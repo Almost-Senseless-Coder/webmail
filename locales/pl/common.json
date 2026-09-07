@@ -292,6 +292,7 @@
     "forward": "Przekaż dalej",
     "delete": "Usuń",
     "archive": "Archiwizuj",
+    "archive_mailbox_not_found": "Archive mailbox not found - cannot archive email",
     "star": "Oznacz gwiazdką",
     "unstar": "Usuń gwiazdkę",
     "mark_unread": "Oznacz jako nieprzeczytane",

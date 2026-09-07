@@ -292,6 +292,7 @@
     "forward": "Transférer",
     "delete": "Supprimer",
     "archive": "Archiver",
+    "archive_mailbox_not_found": "Archive mailbox not found - cannot archive email",
     "star": "Marquer comme favori",
     "unstar": "Retirer des favoris",
     "mark_unread": "Marquer comme non lu",

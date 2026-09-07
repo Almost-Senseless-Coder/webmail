@@ -292,6 +292,7 @@
     "forward": "Preposlať",
     "delete": "Odstrániť",
     "archive": "Archivovať",
+    "archive_mailbox_not_found": "Archive mailbox not found - cannot archive email",
     "star": "Označiť hviezdičkou",
     "unstar": "Odstrániť hviezdičku",
     "mark_unread": "Označiť ako neprečítané",

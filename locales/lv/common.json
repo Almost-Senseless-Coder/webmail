@@ -292,6 +292,7 @@
     "forward": "Pārsūtīt",
     "delete": "Dzēst",
     "archive": "Arhivēt",
+    "archive_mailbox_not_found": "Archive mailbox not found - cannot archive email",
     "star": "Pievienot zvaigznīti",
     "unstar": "Noņemt zvaigznīti",
     "mark_unread": "Atzīmēt kā nelasītu",

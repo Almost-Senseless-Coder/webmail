@@ -292,6 +292,7 @@
     "forward": "Videresend",
     "delete": "Slet",
     "archive": "Arkivér",
+    "archive_mailbox_not_found": "Archive mailbox not found - cannot archive email",
     "star": "Stjernemarkér",
     "unstar": "Fjern stjernemarkering",
     "mark_unread": "Markér som ulæst",

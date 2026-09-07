@@ -292,6 +292,7 @@
     "forward": "转发",
     "delete": "删除",
     "archive": "归档",
+    "archive_mailbox_not_found": "Archive mailbox not found - cannot archive email",
     "star": "加星标",
     "unstar": "取消星标",
     "mark_unread": "标记为未读",

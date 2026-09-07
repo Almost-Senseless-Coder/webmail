@@ -31,7 +31,7 @@ import { usePolicyStore } from "@/stores/policy-store";
 import type { UnifiedAccountClient } from "@/lib/unified-mailbox";
 import { connectedAccountsGrew } from "@/lib/unified-mailbox";
 import { KeyboardShortcutsModal } from "@/components/keyboard-shortcuts-modal";
-import { useEmailStore, buildUnifiedAccountClients } from "@/stores/email-store";
+import { useEmailStore, buildUnifiedAccountClients, ArchiveMailboxNotFoundError } from "@/stores/email-store";
 import { toast } from "@/stores/toast-store";
 import { MailboxShareDialog } from "@/components/layout/mailbox-share-dialog";
 import { ShareNotificationToaster } from "@/components/layout/share-notification-toaster";
@@ -704,6 +704,10 @@ export function MailApp({ linkSegments }: MailAppProps = {}) {
           await batchArchive(client);
         } catch (error) {
           console.error("Failed to batch archive:", error);
+          if (error instanceof ArchiveMailboxNotFoundError) {
+            const { toast } = await import('sonner');
+            toast.error(t('email_viewer.archive_mailbox_not_found'));
+          }
         }
       } else if (selectedEmail) {
         handleArchive();
@@ -2205,7 +2209,11 @@ export function MailApp({ linkSegments }: MailAppProps = {}) {
     const currentMailboxes = readMailboxes();
 
     const archiveMailbox = currentMailboxes.find(m => m.role === "archive" || m.name.toLowerCase() === "archive");
-    if (!archiveMailbox) return;
+    if (!archiveMailbox) {
+      const { toast } = await import('sonner');
+      toast.error(t('email_viewer.archive_mailbox_not_found'));
+      return;
+    }
 
     const { archiveMode } = useSettingsStore.getState();
 

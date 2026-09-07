@@ -292,6 +292,7 @@
     "forward": "Doorsturen",
     "delete": "Verwijderen",
     "archive": "Archiveren",
+    "archive_mailbox_not_found": "Archive mailbox not found - cannot archive email",
     "star": "Ster toevoegen",
     "unstar": "Ster verwijderen",
     "mark_unread": "Markeren als ongelezen",

@@ -292,6 +292,7 @@
     "forward": "Encaminhar",
     "delete": "Excluir",
     "archive": "Arquivar",
+    "archive_mailbox_not_found": "Archive mailbox not found - cannot archive email",
     "star": "Adicionar Estrela",
     "unstar": "Remover Estrela",
     "mark_unread": "Marcar como não lido",

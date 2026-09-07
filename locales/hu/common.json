@@ -292,6 +292,7 @@
     "forward": "Továbbítás",
     "delete": "Törlés",
     "archive": "Archiválás",
+    "archive_mailbox_not_found": "Archive mailbox not found - cannot archive email",
     "star": "Csillagozás",
     "unstar": "Csillagozás megszüntetése",
     "mark_unread": "Megjelölés olvasatlanként",

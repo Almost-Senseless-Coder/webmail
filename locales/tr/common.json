@@ -292,6 +292,7 @@
     "forward": "İlet",
     "delete": "Sil",
     "archive": "Arşivle",
+    "archive_mailbox_not_found": "Archive mailbox not found - cannot archive email",
     "star": "Yıldızla",
     "unstar": "Yıldızı Kaldır",
     "mark_unread": "Okunmadı olarak işaretle",

@@ -292,6 +292,7 @@
     "forward": "전달",
     "delete": "삭제",
     "archive": "보관",
+    "archive_mailbox_not_found": "Archive mailbox not found - cannot archive email",
     "star": "별표 달기",
     "unstar": "별표 해제",
     "mark_unread": "읽지 않은 상태로 표시",

@@ -292,6 +292,7 @@
     "forward": "Урагшаа",
     "delete": "Устгах",
     "archive": "Архив",
+    "archive_mailbox_not_found": "Archive mailbox not found - cannot archive email",
     "star": "од",
     "unstar": "Одгүй болгох",
     "mark_unread": "Уншаагүй гэж тэмдэглэх",

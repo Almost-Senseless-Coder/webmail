@@ -292,6 +292,7 @@
     "forward": "Forward",
     "delete": "Delete",
     "archive": "Archive",
+    "archive_mailbox_not_found": "Archive mailbox not found - cannot archive email",
     "star": "Star",
     "unstar": "Unstar",
     "mark_unread": "Mark as unread",

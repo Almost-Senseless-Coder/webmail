@@ -292,6 +292,7 @@
     "forward": "ارسال مجدد",
     "delete": "حذف",
     "archive": "بایگانی",
+    "archive_mailbox_not_found": "Archive mailbox not found - cannot archive email",
     "star": "ستاره‌دار کردن",
     "unstar": "حذف ستاره",
     "mark_unread": "علامت‌گذاری خوانده نشده",

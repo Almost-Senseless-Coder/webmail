@@ -292,6 +292,7 @@
     "forward": "إعادة توجيه",
     "delete": "حذف",
     "archive": "أرشفة",
+    "archive_mailbox_not_found": "Archive mailbox not found - cannot archive email",
     "star": "تمييز بنجمة",
     "unstar": "إزالة النجمة",
     "mark_unread": "تمييز كغير مقروءة",

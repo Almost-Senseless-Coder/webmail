@@ -1774,6 +1774,8 @@
       "role_trash": "Lixeira",
       "role_junk": "Spam / Lixo eletrônico",
       "role_archive": "Arquivo",
+      "role_scheduled": "Scheduled",
+      "role_snoozed": "Snoozed",
       "role_none": "Nenhum",
       "create_folder": "Criar pasta",
       "create_subfolder": "Criar subpasta",

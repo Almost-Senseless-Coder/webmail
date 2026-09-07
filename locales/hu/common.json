@@ -1777,6 +1777,8 @@
       "role_trash": "Kuka",
       "role_junk": "Spam",
       "role_archive": "Archívum",
+      "role_scheduled": "Scheduled",
+      "role_snoozed": "Snoozed",
       "role_none": "Nincs",
       "create_folder": "Mappa létrehozása",
       "create_subfolder": "Almappa létrehozása",

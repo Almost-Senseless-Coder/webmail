@@ -1781,6 +1781,8 @@
       "role_trash": "Coș de gunoi",
       "role_junk": "Spam / Mesaje nedorite",
       "role_archive": "Arhivă",
+      "role_scheduled": "Scheduled",
+      "role_snoozed": "Snoozed",
       "role_none": "Niciunul",
       "create_folder": "Creați un dosar",
       "create_subfolder": "Creați un subfolder",

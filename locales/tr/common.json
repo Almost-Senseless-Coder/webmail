@@ -1774,6 +1774,8 @@
       "role_trash": "Çöp Kutusu",
       "role_junk": "Spam / İstem Dışı",
       "role_archive": "Arşiv",
+      "role_scheduled": "Scheduled",
+      "role_snoozed": "Snoozed",
       "role_none": "Yok",
       "create_folder": "Klasör Oluştur",
       "create_subfolder": "Alt Klasör Oluştur",

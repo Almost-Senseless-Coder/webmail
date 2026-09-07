@@ -1774,6 +1774,8 @@
       "role_trash": "Kosz",
       "role_junk": "Spam / Niechciane",
       "role_archive": "Archiwum",
+      "role_scheduled": "Scheduled",
+      "role_snoozed": "Snoozed",
       "role_none": "Brak",
       "create_folder": "Utwórz folder",
       "create_subfolder": "Utwórz podfolder",

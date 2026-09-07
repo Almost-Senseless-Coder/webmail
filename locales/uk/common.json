@@ -1774,6 +1774,8 @@
       "role_trash": "сміття",
       "role_junk": "Спам/сміття",
       "role_archive": "Архів",
+      "role_scheduled": "Scheduled",
+      "role_snoozed": "Snoozed",
       "role_none": "Жодного",
       "create_folder": "Створити папку",
       "create_subfolder": "Створити вкладену папку",

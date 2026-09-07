@@ -1738,6 +1738,8 @@
       "role_trash": "אַשׁפָּה",
       "role_junk": "ספאם / זבל",
       "role_archive": "ארכיון",
+      "role_scheduled": "Scheduled",
+      "role_snoozed": "Snoozed",
       "role_none": "אין",
       "create_folder": "צור תיקיה",
       "create_subfolder": "צור תיקיית משנה",

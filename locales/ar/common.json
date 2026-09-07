@@ -1781,6 +1781,8 @@
       "role_trash": "المهملات",
       "role_junk": "البريد المزعج",
       "role_archive": "الأرشيف",
+      "role_scheduled": "Scheduled",
+      "role_snoozed": "Snoozed",
       "role_none": "بلا",
       "create_folder": "إنشاء مجلد",
       "create_subfolder": "إنشاء مجلد فرعي",

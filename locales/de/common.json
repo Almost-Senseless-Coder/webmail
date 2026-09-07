@@ -1774,6 +1774,8 @@
       "role_trash": "Papierkorb",
       "role_junk": "Spam / Junk",
       "role_archive": "Archiv",
+      "role_scheduled": "Scheduled",
+      "role_snoozed": "Snoozed",
       "role_none": "Keine",
       "create_folder": "Ordner erstellen",
       "create_subfolder": "Unterordner erstellen",

@@ -1781,6 +1781,8 @@
       "role_trash": "垃圾桶",
       "role_junk": "垃圾郵件",
       "role_archive": "封存",
+      "role_scheduled": "Scheduled",
+      "role_snoozed": "Snoozed",
       "role_none": "無",
       "create_folder": "建立信件匣",
       "create_subfolder": "建立子信件匣",

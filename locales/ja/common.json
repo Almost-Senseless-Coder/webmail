@@ -1774,6 +1774,8 @@
       "role_trash": "ゴミ箱",
       "role_junk": "迷惑メール",
       "role_archive": "アーカイブ",
+      "role_scheduled": "Scheduled",
+      "role_snoozed": "Snoozed",
       "role_none": "なし",
       "create_folder": "フォルダーを作成",
       "create_subfolder": "サブフォルダーを作成",

@@ -1774,6 +1774,8 @@
       "role_trash": "Cestino",
       "role_junk": "Spam / Indesiderata",
       "role_archive": "Archivio",
+      "role_scheduled": "Scheduled",
+      "role_snoozed": "Snoozed",
       "role_none": "Nessuno",
       "create_folder": "Crea cartella",
       "create_subfolder": "Crea sottocartella",

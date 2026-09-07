@@ -1774,6 +1774,8 @@
       "role_trash": "Prullenbak",
       "role_junk": "Spam / Ongewenst",
       "role_archive": "Archief",
+      "role_scheduled": "Scheduled",
+      "role_snoozed": "Snoozed",
       "role_none": "Geen",
       "create_folder": "Map maken",
       "create_subfolder": "Submap maken",

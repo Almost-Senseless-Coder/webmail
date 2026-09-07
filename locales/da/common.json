@@ -1777,6 +1777,8 @@
       "role_trash": "Papirkurv",
       "role_junk": "Spam",
       "role_archive": "Arkiv",
+      "role_scheduled": "Scheduled",
+      "role_snoozed": "Snoozed",
       "role_none": "Ingen",
       "create_folder": "Opret mappe",
       "create_subfolder": "Opret undermappe",

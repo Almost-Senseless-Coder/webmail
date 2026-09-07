@@ -1774,6 +1774,8 @@
       "role_trash": "Koš",
       "role_junk": "Spam / Nevyžádaná pošta",
       "role_archive": "Archiv",
+      "role_scheduled": "Scheduled",
+      "role_snoozed": "Snoozed",
       "role_none": "Žádná",
       "create_folder": "Vytvořit složku",
       "create_subfolder": "Vytvořit podsložku",

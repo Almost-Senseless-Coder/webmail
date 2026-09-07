@@ -1781,6 +1781,8 @@
       "role_trash": "Хогийн сав",
       "role_junk": "Спам / Хог",
       "role_archive": "Архив",
+      "role_scheduled": "Scheduled",
+      "role_snoozed": "Snoozed",
       "role_none": "Байхгүй",
       "create_folder": "Хавтас үүсгэх",
       "create_subfolder": "Дэд хавтас үүсгэх",

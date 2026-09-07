@@ -1774,6 +1774,8 @@
       "role_trash": "휴지통",
       "role_junk": "스팸/정크함",
       "role_archive": "보관함",
+      "role_scheduled": "Scheduled",
+      "role_snoozed": "Snoozed",
       "role_none": "없음",
       "create_folder": "폴더 만들기",
       "create_subfolder": "하위 폴더 만들기",

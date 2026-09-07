@@ -1774,6 +1774,8 @@
       "role_trash": "已删除",
       "role_junk": "垃圾邮件",
       "role_archive": "归档",
+      "role_scheduled": "Scheduled",
+      "role_snoozed": "Snoozed",
       "role_none": "无",
       "create_folder": "创建文件夹",
       "create_subfolder": "新建子文件夹",

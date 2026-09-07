@@ -1781,6 +1781,8 @@
       "role_trash": "Paperera",
       "role_junk": "Correu brossa",
       "role_archive": "Arxiu",
+      "role_scheduled": "Scheduled",
+      "role_snoozed": "Snoozed",
       "role_none": "Cap",
       "create_folder": "Crea una carpeta",
       "create_subfolder": "Crea una subcarpeta",

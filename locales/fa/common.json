@@ -1781,6 +1781,8 @@
       "role_trash": "زباله‌دان",
       "role_junk": "هرزنامه",
       "role_archive": "بایگانی",
+      "role_scheduled": "Scheduled",
+      "role_snoozed": "Snoozed",
       "role_none": "هیچکدام",
       "create_folder": "ایجاد پوشه",
       "create_subfolder": "ایجاد زیرپوشه",

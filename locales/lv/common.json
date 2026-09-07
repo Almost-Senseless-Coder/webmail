@@ -1774,6 +1774,8 @@
       "role_trash": "Atkritne",
       "role_junk": "Mēstules",
       "role_archive": "Arhīvs",
+      "role_scheduled": "Scheduled",
+      "role_snoozed": "Snoozed",
       "role_none": "Nav",
       "create_folder": "Izveidot mapi",
       "create_subfolder": "Izveidot apakšmapi",

@@ -173,6 +173,12 @@ interface JMAPResponse {
   methodResponses: Array<[string, JMAPResponseResult, string]>;
 }
 
+/** Per-id failure entry of a CalendarEvent/set (`notCreated` / `notDestroyed`). */
+export interface CalendarSetError {
+  type?: string;
+  description?: string;
+}
+
 const DEFAULT_MAILBOX_RIGHTS = {
   mayReadItems: true,
   mayAddItems: true,
@@ -6534,8 +6540,8 @@ export class JMAPClient implements IJMAPClient {
   async batchCreateCalendarEvents(
     events: Partial<CalendarEvent>[],
     targetAccountId?: string,
-  ): Promise<{ created: CalendarEvent[]; failed: string[] }> {
-    if (events.length === 0) return { created: [], failed: [] };
+  ): Promise<{ created: CalendarEvent[]; failed: string[]; notCreated: Record<string, CalendarSetError> }> {
+    if (events.length === 0) return { created: [], failed: [], notCreated: {} };
 
     const accountId = targetAccountId || this.getCalendarsAccountId();
 
@@ -6543,6 +6549,7 @@ export class JMAPClient implements IJMAPClient {
 
     const createdIds: string[] = [];
     const failed: string[] = [];
+    const notCreated: Record<string, CalendarSetError> = {};
     const indexed = events.map((event, index) => ({ event, index }));
 
     for (const batch of batched(indexed, this.getMaxObjectsInSet())) {
@@ -6564,6 +6571,10 @@ export class JMAPClient implements IJMAPClient {
         ["CalendarEvent/set", { accountId, sendSchedulingMessages: false, create: createMap }, "0"]
       ], this.calendarUsing());
 
+      // A method-level error (unknown calendar, missing capability, …) is
+      // not a per-event failure: nothing was created, say so. (#434)
+      this.throwOnCalendarSetError(response, 'create calendar events');
+
       if (response.methodResponses?.[0]?.[0] === "CalendarEvent/set") {
         const result = response.methodResponses[0][1];
         for (const { index } of batch) {
@@ -6573,13 +6584,14 @@ export class JMAPClient implements IJMAPClient {
           } else if (result.notCreated?.[key]) {
             debug.warn('calendar', `CalendarEvent/batchCreate failed for ${key}`, result.notCreated[key]);
             failed.push(key);
+            notCreated[key] = result.notCreated[key];
           }
         }
       }
     }
 
     if (createdIds.length === 0) {
-      return { created: [], failed };
+      return { created: [], failed, notCreated };
     }
 
     // Fetch the created events back for their server-assigned properties
@@ -6608,7 +6620,7 @@ export class JMAPClient implements IJMAPClient {
       failed: failed.length,
     });
 
-    return { created: createdEvents, failed };
+    return { created: createdEvents, failed, notCreated };
   }
 
   async updateCalendarEvent(
@@ -6746,22 +6758,52 @@ export class JMAPClient implements IJMAPClient {
     throw new Error("Failed to delete calendar event");
   }
 
-  async batchDeleteCalendarEvents(eventIds: string[], targetAccountId?: string): Promise<{ destroyed: string[]; notDestroyed: string[] }> {
-    if (eventIds.length === 0) return { destroyed: [], notDestroyed: [] };
+  /**
+   * Reject a CalendarEvent/set response that came back as a method-level
+   * error. Without this the callers counted the (empty) results and
+   * reported "0 events cleared" with no error at all. (#434)
+   */
+  private throwOnCalendarSetError(response: JMAPResponse, action: string): void {
+    const [name, result] = response.methodResponses?.[0] ?? [];
+    if (name === "error") {
+      throw new Error(`Failed to ${action}: ${result?.description || result?.type || 'unknown error'}`);
+    }
+  }
+
+  /**
+   * Destroy events in batches. Per-id failures come back in `notDestroyed`
+   * (with the server's type/description) so the caller can report them;
+   * a method-level error, or a batch in which nothing at all could be
+   * destroyed, rejects with the first description. (#434)
+   */
+  async batchDeleteCalendarEvents(eventIds: string[], targetAccountId?: string): Promise<{ destroyed: string[]; notDestroyed: Record<string, CalendarSetError> }> {
+    if (eventIds.length === 0) return { destroyed: [], notDestroyed: {} };
 
     const accountId = targetAccountId || this.getCalendarsAccountId();
     const destroyed: string[] = [];
-    const notDestroyed: string[] = [];
+    const notDestroyed: Record<string, CalendarSetError> = {};
 
     for (const batch of batched(eventIds, this.getMaxObjectsInSet())) {
       const response = await this.request([
         ["CalendarEvent/set", { accountId, destroy: batch }, "0"]
       ], this.calendarUsing());
 
+      this.throwOnCalendarSetError(response, 'delete calendar events');
+
+      let destroyedInBatch = 0;
       if (response.methodResponses?.[0]?.[0] === "CalendarEvent/set") {
         const result = response.methodResponses[0][1];
-        if (result.destroyed) destroyed.push(...result.destroyed);
-        if (result.notDestroyed) notDestroyed.push(...Object.keys(result.notDestroyed));
+        if (result.destroyed) {
+          destroyed.push(...result.destroyed);
+          destroyedInBatch = result.destroyed.length;
+        }
+        if (result.notDestroyed) Object.assign(notDestroyed, result.notDestroyed);
+      }
+      if (destroyedInBatch === 0 && batch.length > 0) {
+        const first = Object.values(notDestroyed)[0];
+        throw new Error(
+          `Failed to delete calendar events: ${first?.description || first?.type || 'server refused the request'}`,
+        );
       }
     }
 

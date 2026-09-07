@@ -1539,8 +1539,9 @@ export function CalendarApp({ linkSegments }: CalendarAppProps = {}) {
                 try {
                   const count = await clearCalendarEvents(client, cal.id);
                   toast.success(tMgmt("events_cleared", { count }));
-                } catch {
-                  toast.error(tMgmt("error_clear"));
+                } catch (err) {
+                  // The store rethrows the server's reason (#434).
+                  toast.error(err instanceof Error && err.message ? err.message : tMgmt("error_clear"));
                 }
               } : undefined}
               onDeleteCalendar={client ? async (cal: Calendar) => {

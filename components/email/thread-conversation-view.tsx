@@ -465,7 +465,7 @@ function EmailCard({
   table { table-layout: auto; overflow-wrap: break-word; }
   td, th { word-break: break-word; padding: 0.5rem; }
   pre { white-space: pre-wrap; word-wrap: break-word; }
-</style></head><body>${emailContent.html}</body></html>`;
+</style></head><body dir="auto">${emailContent.html}</body></html>`;
   }, [emailContent.isHtml, emailContent.html]);
 
   const handleIframeLoad = useCallback(() => {

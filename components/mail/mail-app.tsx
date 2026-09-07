@@ -1696,15 +1696,12 @@ export function MailApp({ linkSegments }: MailAppProps = {}) {
         const toastInstance = (await import('sonner')).toast;
         toastInstance.warning(t('email_composer.send_filing_warning'));
       }
-      if (result.scheduled) {
-        await refreshScheduledMetadata(client);
-        if (isScheduledView) await fetchScheduledEmails(client);
-        return;
-      }
-
       // Mark the original email with $answered or $forwarded keyword. Route the
       // write to the email's own account so the flag lands on shared/group-mailbox
       // messages instead of being dropped against the reaching account. (#281)
+      // This runs before the scheduled early-return: the undo-send delay is a
+      // HOLDFOR submission, so `scheduled` is true for every delayed send and
+      // the flag was never set. (#985)
       if (originalEmailId && (effectiveMode === 'reply' || effectiveMode === 'replyAll' || effectiveMode === 'forward')) {
         const keyword = effectiveMode === 'forward' ? '$forwarded' : '$answered';
         try {
@@ -1712,6 +1709,12 @@ export function MailApp({ linkSegments }: MailAppProps = {}) {
         } catch (e) {
           debug.error(`Failed to set ${keyword} keyword:`, e);
         }
+      }
+
+      if (result.scheduled) {
+        await refreshScheduledMetadata(client);
+        if (isScheduledView) await fetchScheduledEmails(client);
+        return;
       }
 
       // Refresh the current mailbox to update the UI
@@ -3126,20 +3129,21 @@ export function MailApp({ linkSegments }: MailAppProps = {}) {
       envelopeMailFrom,
     );
 
-    if (result.scheduled) {
-      await refreshScheduledMetadata(client);
-      return;
-    }
-
     // Mark the original email as answered. Route the write to the email's own
     // account so the flag lands on shared/group-mailbox messages instead of
-    // being dropped against the reaching account. (#281)
+    // being dropped against the reaching account. (#281) Runs before the
+    // scheduled early-return so a delayed (undo-send) reply is flagged too. (#985)
     {
       try {
         await useEmailStore.getState().markEmailKeyword(client, originalEmailId, '$answered');
       } catch (e) {
         debug.error('Failed to set $answered keyword:', e);
       }
+    }
+
+    if (result.scheduled) {
+      await refreshScheduledMetadata(client);
+      return;
     }
 
     // Refresh emails to show the sent reply

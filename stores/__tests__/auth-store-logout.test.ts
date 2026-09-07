@@ -212,4 +212,77 @@ describe('auth-store logout redirects', () => {
     expect(sessionStorage.getItem('session_expired')).toBeNull();
     expect(replaceSpy).not.toHaveBeenCalled();
   });
+  it('signs out after five consecutive Bulwark-side refresh failures (500) instead of retrying forever (#972)', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi.fn(async (input: FetchInput, init?: FetchInit) => {
+      const url = String(input);
+      const method = init?.method ?? 'GET';
+
+      if (url === '/api/auth/token?slot=0&force=true' && method === 'PUT') {
+        return { ok: false, status: 500, json: async () => ({}) };
+      }
+      if ((url === '/api/auth/token?slot=0' || url === '/api/auth/session?slot=0') && method === 'DELETE') {
+        return { ok: true, json: async () => ({}) };
+      }
+
+      throw new Error(`Unexpected fetch call: ${method} ${url}`);
+    });
+
+    vi.stubGlobal('fetch', fetchMock);
+    const replaceSpy = vi.spyOn(browserNavigation, 'replaceWindowLocation').mockImplementation(() => {});
+
+    window.history.pushState({}, '', '/en/mail');
+    useAuthStore.setState({ isAuthenticated: true, authMode: 'oauth', activeAccountId: null });
+
+    await useAuthStore.getState().refreshAccessToken();
+    // Each failed attempt arms one retry; the fifth 500 ends the session, so
+    // running all timers drains the ladder without looping forever.
+    await vi.runAllTimersAsync();
+
+    const puts = fetchMock.mock.calls.filter(
+      ([input, init]) => String(input) === '/api/auth/token?slot=0&force=true' && init?.method === 'PUT',
+    ).length;
+    expect(puts).toBe(5);
+    expect(useAuthStore.getState().isAuthenticated).toBe(false);
+    expect(sessionStorage.getItem('session_expired')).toBe('true');
+    expect(replaceSpy).toHaveBeenCalledWith('/en/login');
+  });
+
+  it('keeps retrying an upstream outage (503) beyond five failures without evicting the account (#972)', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi.fn(async (input: FetchInput, init?: FetchInit) => {
+      const url = String(input);
+      const method = init?.method ?? 'GET';
+
+      if (url === '/api/auth/token?slot=0&force=true' && method === 'PUT') {
+        return { ok: false, status: 503, json: async () => ({}) };
+      }
+
+      throw new Error(`Unexpected fetch call: ${method} ${url}`);
+    });
+
+    vi.stubGlobal('fetch', fetchMock);
+    const replaceSpy = vi.spyOn(browserNavigation, 'replaceWindowLocation').mockImplementation(() => {});
+
+    useAuthStore.setState({ isAuthenticated: true, authMode: 'oauth', activeAccountId: null });
+
+    await useAuthStore.getState().refreshAccessToken();
+    // The backoff ladder tops out at 360 s (armed 60 s early): five more
+    // windows are enough for at least five failures in a row.
+    for (let i = 0; i < 5; i++) {
+      await vi.advanceTimersByTimeAsync(301_000);
+    }
+
+    const puts = fetchMock.mock.calls.filter(
+      ([input, init]) => String(input) === '/api/auth/token?slot=0&force=true' && init?.method === 'PUT',
+    ).length;
+    expect(puts).toBeGreaterThanOrEqual(5);
+    expect(useAuthStore.getState().isAuthenticated).toBe(true);
+    expect(sessionStorage.getItem('session_expired')).toBeNull();
+    expect(replaceSpy).not.toHaveBeenCalled();
+    // A further retry is still armed.
+    expect(vi.getTimerCount()).toBeGreaterThan(0);
+  });
 });

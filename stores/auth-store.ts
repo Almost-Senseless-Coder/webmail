@@ -441,6 +441,36 @@ function nextRefreshRetrySeconds(accountId?: string): number {
 
 function resetRefreshBackoff(accountId?: string): void {
   refreshFailureCounts.delete(accountId ?? '__global__');
+  permanentRefreshFailureCounts.delete(accountId ?? '__global__');
+}
+
+// /api/auth/token answers 503 for an upstream outage (retry forever - the IdP
+// may come back) but 500/502 for a Bulwark-side failure (misconfiguration,
+// broken token response). The latter does not heal by waiting, so after this
+// many consecutive answers the account is evicted and the user asked to sign
+// in again instead of retrying silently forever. (#972)
+const MAX_PERMANENT_REFRESH_FAILURES = 5;
+const permanentRefreshFailureCounts = new Map<string, number>();
+
+function isPermanentRefreshFailure(status: number): boolean {
+  return status === 500 || status === 502;
+}
+
+/** Records a 500/502 refresh answer; true once the consecutive cap is reached. */
+function recordPermanentRefreshFailure(status: number, accountId?: string): boolean {
+  if (!isPermanentRefreshFailure(status)) return false;
+  const key = accountId ?? '__global__';
+  const failures = (permanentRefreshFailureCounts.get(key) ?? 0) + 1;
+  permanentRefreshFailureCounts.set(key, failures);
+  if (failures < MAX_PERMANENT_REFRESH_FAILURES) return false;
+  permanentRefreshFailureCounts.delete(key);
+  return true;
+}
+
+function notifySignInAgain(): void {
+  void import('@/stores/toast-store').then(({ toast }) => {
+    toast.error('Your session could not be renewed', 'Sign in again to continue.');
+  }).catch(() => {});
 }
 
 // Only re-arm a failed refresh while someone is still signed in to that
@@ -1213,6 +1243,17 @@ export const useAuthStore = create<AuthState>()(
                 get().logout();
                 return null;
               }
+              // A Bulwark-side failure (500/502) that keeps repeating will not
+              // heal by waiting: stop retrying and ask for a fresh sign-in. (#972)
+              if (recordPermanentRefreshFailure(res.status, accountId ?? undefined)) {
+                debug.error(`Token refresh failed permanently (${res.status}) ${MAX_PERMANENT_REFRESH_FAILURES} times - signing out`);
+                resetRefreshBackoff(accountId ?? undefined);
+                notifySignInAgain();
+                notifyParent('sso:session-expired');
+                markSessionExpired();
+                if (accountId) get().removeAccount(accountId); else get().logout();
+                return null;
+              }
               if (shouldRetryRefresh(accountId ?? undefined)) {
                 const retryIn = nextRefreshRetrySeconds(accountId ?? undefined);
                 debug.error(`Token refresh unavailable (${res.status}), retrying with backoff`);
@@ -1752,9 +1793,12 @@ export const useAuthStore = create<AuthState>()(
                   await contextSync;
                   accountStore.updateAccount(account.id, { isConnected: true, hasError: false });
                   void syncAccountDisplayName(account.id, client);
-                } else if (res.status >= 500) {
+                } else if (res.status >= 500 && !recordPermanentRefreshFailure(res.status, account.id)) {
                   throw new TransientAuthError('Token refresh failed', res.status);
                 } else {
+                  // Repeated 500/502 (see recordPermanentRefreshFailure) falls
+                  // through here and evicts the account like a rejection. (#972)
+                  if (res.status >= 500) notifySignInAgain();
                   throw new Error(`Token refresh failed: ${res.status}`);
                 }
               } else {
